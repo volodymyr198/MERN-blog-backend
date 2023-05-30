@@ -1,0 +1,352 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "version": "1.0.0",
+        "title": "MERN-BLOG API docs",
+        "description": "API documentation for MERN-BLOG progect"
+    },
+    "consumes": ["application/json", "multipart/form-data"],
+    "produces": ["application/json"],
+    "servers": [{ "url": "http://localhost:3002" }],
+    "tags": [
+        {
+            "name": "Auth",
+            "description": "Authorization endpoints"
+        }
+    ],
+    "paths": {
+        "/api/auth/register": {
+            "post": {
+                "tags": ["Auth"],
+                "summary": "User registration",
+                "parameters": [],
+                "requestBody": {
+                    "description": "<b>DESCRIPTION OF QUERY PARAMETERS:</b><br> <br><b>*username</b> - string, the user's name. <br> <b>*password</b> - string, user password. Must contain min 6, max 16  at least 1 uppercase letter, 1 lowercase letter, and 1 number <br>Pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*d).*$/<br><br><b>All fields are required!</b>",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RegistrationLoginRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "The user is registered successfully<br><br><b>DESCRIPTION OF RESPONSE PARAMETERS:</b>.<br><b>newUser</b> - object, the user's info<br> <b>username</b> - string, the user's name.<br><b>password</b>- string, the user's password <br><b>posts</b>- array, user's posts <br><b>_id</b>- string, user's id<br><b>createdAt</b>- string, create date<br><b>updatedAt</b>- string, update date<br><br><b>message</b>- string, message about successful registration ",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/RegistrationResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "<b>Password is not valid</b>",
+                        "content": {}
+                    },
+                    "409": {
+                        "description": "This user is already busy!",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "This user is already busy!"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/login": {
+            "post": {
+                "tags": ["Auth"],
+                "summary": "User login",
+                "parameters": [],
+                "requestBody": {
+                    "description": "<b>DESCRIPTION OF QUERY PARAMETERS:</b><br> <br><b>*username</b> - string, the user's name. <br> <b>*password</b> - string, user password. Must contain min 6, max 16  at least 1 uppercase letter, 1 lowercase letter, and 1 number <br>Pattern: /^(?=.*[a-z])(?=.*[A-Z])(?=.*d).*$/<br><br><b>All fields are required!</b>",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/RegistrationLoginRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "The user is logined successfully<br><br><b>DESCRIPTION OF RESPONSE PARAMETERS:</b><br><b>token</b>- string, user's token<br><b>user</b> - object, the user's info<br><b>_id</b>- string, user's id<br> <b>username</b> - string, the user's name.<br><b>password</b>- string, the user's password <br><b>posts</b>- array, user's posts <br><b>createdAt</b>- string, create date<br><b>updatedAt</b>- string, update date<br><br><b>message</b>- string, message about successful logged ",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/LoginResponse"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "<b>Password is not valid or Invalid</b>",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Invalid password!"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Such a user does not exist"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/auth/me": {
+            "get": {
+                "tags": ["Auth"],
+                "summary": "Current user",
+                "security": [
+                    {
+                        "Bearer": []
+                    }
+                ],
+                "parameters": [],
+                "responses": {
+                    "200": {
+                        "description": "The user is logined successfully<br><br><b>DESCRIPTION OF RESPONSE PARAMETERS:</b><br><b>token</b>- string, user's token<br><b>user</b> - object, the user's info<br><b>_id</b>- string, user's id<br> <b>username</b> - string, the user's name.<br><b>password</b>- string, the user's password <br><b>posts</b>- array, user's posts <br><b>createdAt</b>- string, create date<br><b>updatedAt</b>- string, update date<br><br><b>message</b>- string, message about successful logged ",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/MeResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Not authorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Not authorized"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Such a user does not exist"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "RegistrationLoginRequest": {
+                "type": "object",
+                "required": ["username", "password"],
+                "properties": {
+                    "username": {
+                        "type": "string",
+                        "description": "User's name",
+                        "example": "Tom"
+                    },
+                    "password": {
+                        "type": "string",
+                        "description": "User's password",
+                        "minLength": 6,
+                        "maxLength": 16,
+                        "pattern": "/^(?=.*[a-z])(?=.*[A-Z])(?=.*d).*$/",
+                        "example": "Qwert123"
+                    }
+                }
+            },
+            "RegistrationResponse": {
+                "type": "object",
+                "required": ["newUser", "message"],
+                "properties": {
+                    "newUser": {
+                        "type": "object",
+                        "properties": {
+                            "username": {
+                                "type": "string"
+                            },
+                            "password": {
+                                "type": "string"
+                            },
+                            "posts": {
+                                "type": "array"
+                            },
+                            "_id": {
+                                "type": "string"
+                            },
+                            "createdAt": {
+                                "type": "string"
+                            },
+                            "updatedAt": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "message": {
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "newUser": {
+                        "username": "Tom2",
+                        "password": "$2a$10$oWQ.yQQG9y0T4yF9pJe3uO7/tIYpw1I/v0BQrFIzY3BHahDAc11sa",
+                        "posts": [],
+                        "_id": "6475b55d74f34bc7fd35a98c",
+                        "createdAt": "2023-05-30T08:35:41.761Z",
+                        "updatedAt": "2023-05-30T08:35:41.761Z"
+                    },
+                    "message": "Registration was successful!"
+                }
+            },
+            "LoginResponse": {
+                "type": "object",
+                "required": ["token", "user", "message"],
+                "properties": {
+                    "token":{
+                        "type": "string"
+                    },
+                    "user": {
+                        "type": "object",
+                        "properties": {
+                            "_id": {
+                                "type": "string"
+                            },
+                            "username": {
+                                "type": "string"
+                            },
+                            "password": {
+                                "type": "string"
+                            },
+                            "posts": {
+                                "type": "array"
+                            },
+
+                            "createdAt": {
+                                "type": "string"
+                            },
+                            "updatedAt": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "message": {
+                        "type": "string"
+                    }
+                },
+                "example": {
+                    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NzViMmZkODdiMDgwMjA1MTlhODI4MSIsImlhdCI6MTY4NTQ0MTIxMywiZXhwIjoxNjg4MDMzMjEzfQ.uqXx7ejVo-irJAy1ziCm_niw8lWfhKOr7ikqUAOa3b8",
+                    "user": {
+                        "_id": "6475b2fd87b08020519a8281",
+                        "username": "Tom",
+                        "password": "$2a$10$ZhIrBz9iX4PyBDEDcVlZdeb8dcwBPb9Pk24Wggwps.XW7kbQEtsW2",
+                        "posts": [],
+                        "createdAt": "2023-05-30T08:25:33.157Z",
+                        "updatedAt": "2023-05-30T08:25:33.157Z"
+                    },
+                    "message": "You are logged in"
+                }
+            },
+            "MeResponse": {
+                "type": "object",
+                "required": ["token", "user"],
+                "properties": {
+                    "token": {
+                        "type": "string"
+                    },
+                    "user": {
+                        "type": "object",
+                        "properties": {
+                            "_id": {
+                                "type": "string"
+                            },
+                            "username": {
+                                "type": "string"
+                            },
+                            "password": {
+                                "type": "string"
+                            },
+                            "posts": {
+                                "type": "array"
+                            },
+
+                            "createdAt": {
+                                "type": "string"
+                            },
+                            "updatedAt": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "example": {
+                    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY0NzViMmZkODdiMDgwMjA1MTlhODI4MSIsImlhdCI6MTY4NTQ0MTIxMywiZXhwIjoxNjg4MDMzMjEzfQ.uqXx7ejVo-irJAy1ziCm_niw8lWfhKOr7ikqUAOa3b8",
+                    "user": {
+                        "_id": "6475b2fd87b08020519a8281",
+                        "username": "Tom",
+                        "password": "$2a$10$ZhIrBz9iX4PyBDEDcVlZdeb8dcwBPb9Pk24Wggwps.XW7kbQEtsW2",
+                        "posts": [],
+                        "createdAt": "2023-05-30T08:25:33.157Z",
+                        "updatedAt": "2023-05-30T08:25:33.157Z"
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "Bearer": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        }
+    }
+}

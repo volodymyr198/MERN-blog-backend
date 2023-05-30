@@ -39,14 +39,14 @@ export const login = async (req, res,next) => {
 
         if (!user) {
             return res
-                .status(400)
+                .status(404)
                 .json({ message: 'Such a user does not exist' });
         }
 
         const isPasswordCorrect = await bcrypt.compare(password, user.password);
 
         if (!isPasswordCorrect) {
-            return res.status(400).json({ message: 'Invalid password' });
+            return res.status(401).json({ message: 'Invalid password' });
         }
 
         const token = jwt.sign(
@@ -69,7 +69,7 @@ export const getMe = async (req, res, next) => {
 
         if (!user) {
             return res
-                .status(400)
+                .status(404)
                 .json({ message: 'Such a user does not exist' });
         }
 

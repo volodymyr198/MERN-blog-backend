@@ -3,6 +3,8 @@ import mongoose from 'mongoose';
 import dotenv from "dotenv"
 import cors from 'cors';
 import logger from "morgan";
+import swaggerUi from 'swagger-ui-express';
+import swaggerDocument from './swagger.json' assert { type: 'json' };
 
 import authRoute from "./routes/auth.js";
 
@@ -20,11 +22,9 @@ app.use(logger(formatsLogger));
 app.use(cors());
 app.use(express.json());
 
-app.get('/', (req,res) => {
-    return res.json ({message: "Welcome"})
-})
-
 app.use('/api/auth', authRoute);
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 app.use((req, res) => {
     res.status(404).json({ message: 'Not found' });
