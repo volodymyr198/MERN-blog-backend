@@ -5,6 +5,7 @@ import cors from 'cors';
 import logger from "morgan";
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from './swagger.json' assert { type: 'json' };
+import fileUpload from 'express-fileupload';
 
 import authRoute from "./routes/auth.js";
 import postRoute from "./routes/posts.js";
@@ -21,7 +22,9 @@ const formatsLogger = app.get('env') === 'development' ? 'dev' : 'short';
 
 app.use(logger(formatsLogger));
 app.use(cors());
+app.use(fileUpload());
 app.use(express.json());
+app.use(express.static("uploads"));
 
 app.use('/api/auth', authRoute);
 app.use('/api/posts', postRoute);
