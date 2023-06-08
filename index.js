@@ -7,6 +7,7 @@ import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from './swagger.json' assert { type: 'json' };
 
 import authRoute from "./routes/auth.js";
+import postRoute from "./routes/posts.js";
 
 const app = express();
 dotenv.config();
@@ -23,6 +24,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use('/api/auth', authRoute);
+app.use('/api/posts', postRoute);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
