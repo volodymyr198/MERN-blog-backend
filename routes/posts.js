@@ -5,7 +5,7 @@ import { createPost, getAll } from '../controllers/posts.js';
 const router = new Router();
 
 router.post('/', checkAuth, createPost);
-router.get('/', checkAuth, getAll);
+router.get('/', getAll);
 
 
 export default router;
