@@ -48,3 +48,16 @@ export const createPost = async (req, res, next) => {
         next(error);
     }
 };
+
+export const getAll = async (req, res, next) => {
+    try {
+        const posts = await Post.find().sort('-createdAt');
+        const popularPosts = await Post.find().limit(5).sort('-vievs');
+
+        if (!posts) {
+            return res.json({ message: 'There are no posts!' });
+        }
+    } catch (error) {
+        next(error);
+    }
+};
