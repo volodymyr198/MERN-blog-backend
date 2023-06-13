@@ -43,7 +43,6 @@ export const createPost = async (req, res, next) => {
         });
 
         return res.json(newPostWithoutImage);
-        
     } catch (error) {
         next(error);
     }
@@ -57,6 +56,20 @@ export const getAll = async (req, res, next) => {
         if (!posts) {
             return res.json({ message: 'There are no posts!' });
         }
+
+        res.json({ posts, popularPosts });
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const getById = async (req, res, next) => {
+    try {
+        const post = await Post.findByIdAndUpdate(req.params.id, {
+            $inc: { views: 1 },
+        });
+
+        res.json(post);
     } catch (error) {
         next(error);
     }
