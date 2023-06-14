@@ -74,3 +74,16 @@ export const getById = async (req, res, next) => {
         next(error);
     }
 };
+
+export const getMyPosts = async (req, res, next) => {
+    try {
+        const user = await User.findById(req.userId)
+        const posts = await Promise.all(user.posts.map(post => {
+            return Post.findById(post._id)
+        }))
+
+        res.json(posts);
+    } catch (error) {
+        next(error);
+    }
+};
