@@ -77,12 +77,32 @@ export const getById = async (req, res, next) => {
 
 export const getMyPosts = async (req, res, next) => {
     try {
-        const user = await User.findById(req.userId)
-        const posts = await Promise.all(user.posts.map(post => {
-            return Post.findById(post._id)
-        }))
+        const user = await User.findById(req.userId);
+        const posts = await Promise.all(
+            user.posts.map(post => {
+                return Post.findById(post._id);
+            })
+        );
 
         res.json(posts);
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const removeMyPost = async (req, res, next) => {
+    try {
+        const post = await Post.findByIdAndDelete(req.params.id);
+
+        if (!post) {
+            return res.json({ message: 'There is no such post!' });
+        }
+
+        await User.findByIdAndUpdate(req.userId, {
+            $pull: { posts: req.params.id },
+        });
+
+        res.json({ message: 'Post deleted successfully' });
     } catch (error) {
         next(error);
     }
