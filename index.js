@@ -8,7 +8,8 @@ import swaggerDocument from './swagger.json' assert { type: 'json' };
 import fileUpload from 'express-fileupload';
 
 import authRoute from "./routes/auth.js";
-import postRoute from "./routes/posts.js";
+import postRoute from './routes/posts.js';
+import commentRoute from './routes/comment.js';
 
 const app = express();
 dotenv.config();
@@ -28,6 +29,7 @@ app.use(express.static("uploads"));
 
 app.use('/api/auth', authRoute);
 app.use('/api/posts', postRoute);
+app.use('/api/comments', commentRoute);
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
