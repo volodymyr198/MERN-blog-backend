@@ -6,7 +6,8 @@ import {
     getById,
     getMyPosts,
     removeMyPost,
-    updateMyPost
+    updateMyPost,
+    getPostComments,
 } from '../controllers/posts.js';
 
 const router = new Router();
@@ -17,5 +18,6 @@ router.get('/:id', getById);
 router.get('/user/me', checkAuth, getMyPosts);
 router.delete('/:id', checkAuth, removeMyPost);
 router.put('/:id', checkAuth, updateMyPost);
+router.get('/comments/:id', getPostComments);
 
 export default router;
